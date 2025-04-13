@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+install:
+runtime -versions:
+python: 3.9 # Match Lambda runtime
+commands:
+- echo "Installing dependencies..."
+# Install requirements into the current directory
+- pip install -r requirements.txt -t .
+build:
+commands:
+- echo "Zipping deployment package..."
+# Zip installed libs and function code
+- zip -r deployment_package.zip .
+post_build:
+commands:
+- echo "Build completed on $(date)"
+
+artifacts:
+files:
+# Define the output artifact
+- deployment_package.zip
+discard -paths: yes # Optional
+
+# Optional cache for faster builds
+# cache:
+# paths:
+# - '/root/.cache/pip'
