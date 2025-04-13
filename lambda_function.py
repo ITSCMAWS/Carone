@@ -13,7 +13,7 @@ def lambda_handler(event, context):
     current_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
 
     response_body = {
-        'message': "Hello from your Lambda function!",
+        'message': "Hello from UWW!",
         'currentTime': current_time_str,
         'inputEvent': event
     }
