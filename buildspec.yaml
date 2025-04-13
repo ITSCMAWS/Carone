@@ -1,29 +1,31 @@
 version: 0.2
 
 phases:
-install:
-runtime -versions:
-python: 3.9 # Match Lambda runtime
-commands:
-- echo "Installing dependencies..."
-# Install requirements into the current directory
-- pip install -r requirements.txt -t .
-build:
-commands:
-- echo "Zipping deployment package..."
-# Zip installed libs and function code
-- zip -r deployment_package.zip .
-post_build:
-commands:
-- echo "Build completed on $(date)"
+  install:
+    runtime-versions:
+      python: 3.9 # Specify the Python version matching your Lambda runtime
+    commands:
+      - echo "Installing dependencies..."
+      # Install dependencies from requirements.txt into the current directory
+      - pip install -r requirements.txt -t .
+  build:
+    commands:
+      - echo "Zipping deployment package..."
+      # Zip the installed libraries and our function code
+      # Important: Ensure lambda_function.py and any dependencies are included
+      - zip -r deployment_package.zip .
+  post_build:
+    commands:
+      - echo "Build completed on $(date)"
+      # --- Deployment Step Added Here ---
+      # Replace MyCICDLambdaFunction with your exact Lambda function name
+      - echo "Updating Lambda function code..."
+      - aws lambda update-function-code --function-name MyCICDLambdaFunction --zip-file fileb://deployment_package.zip
+      - echo "Lambda function update initiated."
 
 artifacts:
-files:
-# Define the output artifact
-- deployment_package.zip
-discard -paths: yes # Optional
-
-# Optional cache for faster builds
-# cache:
-# paths:
-# - '/root/.cache/pip'
+  # We don't strictly NEED artifacts for CodePipeline anymore since deploy happens here,
+  # but it can be useful for debugging or other purposes. You can keep it or remove it.
+  files:
+    - deployment_package.zip
+  discard-paths: yes
