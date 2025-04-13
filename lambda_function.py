@@ -1,34 +1,34 @@
 import json
-import datetime # Example of importing a standard library
+import datetime
 
-print('Loading function') # Runs during 'cold start'
+print('Loading function')
 
-def lambda_handler(event , context):
-# 1. Log the incoming event
-print("Received event: " + json.dumps(event , indent=2))
+# Line defining the function (NO indent)
+def lambda_handler(event, context):
+    # Line 8: MUST be indented (e.g., 4 spaces)
+    print("Received event: " + json.dumps(event, indent=2))
 
-# 2. Get current time
-now = datetime.datetime.now()
-current_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
+    # Subsequent lines inside the function MUST have the same indent
+    now = datetime.datetime.now()
+    current_time_str = now.strftime("%Y-%m-%d %H:%M:%S")
 
-# 3. Prepare the response
-response_body = {
-    'message': "Hello from your Lambda function!",
-    'currentTime': current_time_str,
-    'inputEvent': event # Echo back event data
-}
+    response_body = {
+        'message': "Hello from your Lambda function!",
+        'currentTime': current_time_str,
+        'inputEvent': event
+    }
 
-# 4. Return a suitable response structure
-return {
-    'statusCode': 200,
-    'headers': {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-    },
-    'body': json.dumps(response_body)
-}
+    # The return statement MUST also be indented
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
+        'body': json.dumps(response_body)
+    }
 
-# Helper functions can be defined outside the handler
-def helper_function():
-    pass
+# Code outside the function starts back at NO indent
+# def helper_function():
+#     pass
